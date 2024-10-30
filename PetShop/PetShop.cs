@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
+using System.Text.RegularExpressions;
 
 namespace Training.DomainClasses
 {
@@ -24,5 +26,22 @@ namespace Training.DomainClasses
                 _petsInTheStore.Add(newPet);
             }
         }
+
+        public IEnumerable<Pet> AllCats()
+        {
+            foreach (var pet in _petsInTheStore)
+            {
+                if(pet.species == Species.Cat)
+                    yield return pet;
+            }
+        }
+
+        public IEnumerable<Pet> AllPetsSortedByName()
+        {
+            var result = new List<Pet>(_petsInTheStore);
+
+            result.Sort((pet1,pet2) => pet1.name.CompareTo((pet2.name)));
+
+            return result;        }
     }
 }
