@@ -2,13 +2,13 @@ using System.Collections.Generic;
 
 namespace Training.DomainClasses
 {
-    public class IteratorExtensions
+    public static class IteratorExtensions
     {
-        public static IEnumerable<Pet> OneAtATime(IEnumerable<Pet> pets)
+        public static IEnumerable<TItem> OneAtATime<TItem>(this IEnumerable<TItem> items)
         {
-            foreach (var pet in pets)
+            foreach (var item in items)
             {
-                yield return pet;
+                yield return item;
             }
         }
     }
