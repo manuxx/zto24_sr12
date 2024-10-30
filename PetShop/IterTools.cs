@@ -4,11 +4,11 @@ namespace Training.DomainClasses
 {
     public static class IterTools
     {
-        public static IEnumerable<TItem> OneAtATime<TItem>(this IList<TItem> pets)
+        public static IEnumerable<TItem> OneAtATime<TItem>(this IList<TItem> items)
         {
-            foreach (var pet in pets)
+            foreach (var item in items)
             {
-                yield return pet;
+                yield return item;
             }
         }
     }
