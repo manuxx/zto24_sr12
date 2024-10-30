@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace Training.DomainClasses
 {
-    public class ReadOnlySet<Pet> : IEnumerable<Pet>
+    public class ReadOnlySet<TItem> : IEnumerable<TItem>
     {
-        private readonly IList<Pet> _items;
+        private readonly IEnumerable<TItem> _items;
 
-        public ReadOnlySet(IList<Pet> items)
+        public ReadOnlySet(IEnumerable<TItem> items)
         {
             _items = items;
         }
 
-        public IEnumerator<Pet> GetEnumerator()
+        public IEnumerator<TItem> GetEnumerator()
         {
-            return _items.OneAtATime().GetEnumerator();
+            return _items.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
