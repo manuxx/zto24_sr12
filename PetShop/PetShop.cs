@@ -27,12 +27,19 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCats()
         {
-            throw new NotImplementedException();
+            foreach (var pet in _petsInTheStore)
+            {
+                if(pet.species==Species.Cat)
+                    yield return pet;
+            }
+
         }
 
         public IEnumerable<Pet> AllPetsSortedByName()
         {
-            throw new NotImplementedException();
+            var result = new List<Pet>(_petsInTheStore);
+            result.Sort((pet1, pet2) => pet1.name.CompareTo(pet2.name));
+            return result;
         }
     }
 }
