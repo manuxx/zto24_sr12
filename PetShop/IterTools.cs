@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace Training.DomainClasses
 {
-    public class IterTools
+    public static class IterTools
     {
-        public static IEnumerable<Pet> OneAtATime(IList<Pet> pets)
+        public static IEnumerable<TItem> OneAtATime<TItem>(this IList<TItem> pets)
         {
             foreach (var pet in pets)
             {
