@@ -1,13 +1,17 @@
+using System;
 using System.Collections.Generic;
-using Training.DomainClasses;
 
-public static class IteratorExtensions
+namespace Training.DomainClasses
 {
-    public static IEnumerable<TItem> OneAtATime<TItem>(this IEnumerable<TItem> items)
+    public static class IteratorExtensions
     {
-        foreach (var item in items)
+        public static IEnumerable<Pet> OneAnimalThat(PetShop petShop, Func<Pet, bool> condition, IList<Pet> pets)
         {
-            yield return item;
+            foreach (var pet in pets)
+            {
+                if (condition(pet))
+                    yield return pet;
+            }
         }
     }
 }
