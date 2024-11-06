@@ -11,13 +11,37 @@ public static class IteratorExtensions
             yield return item;
         }
     }
-
-    public static IEnumerable<TItem> AllThat<TItem>(this IEnumerable<TItem> items, Predicate<TItem> condition)
+    public static IEnumerable<TItem> AllThat<TItem>(this IEnumerable<TItem> items, Criteria<TItem> criteria)
     {
         foreach (var item in items)
         {
-            if(condition(item))
+            if (criteria.IsSatisfiedBy(item))
                 yield return item;
         }
     }
+
+    public static IEnumerable<TItem> AllThat<TItem>(this IEnumerable<TItem> items, Predicate<TItem> condition)
+    {
+        return items.AllThat(new AnonymousCriteria<TItem>(condition));
+    }
+}
+
+public class AnonymousCriteria<TItem> : Criteria<TItem>
+{
+    private Predicate<TItem> _condition;
+    public AnonymousCriteria(Predicate<TItem> conditon)
+    {
+        _condition = conditon;
+    }
+
+    public bool IsSatisfiedBy(TItem item)
+    {
+        return _condition(item);
+    }
+
+}
+
+public interface Criteria<TItem>
+{
+    bool IsSatisfiedBy(TItem item);
 }
