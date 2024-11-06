@@ -13,13 +13,13 @@ public static class IteratorExtensions
         }
     }
 
-    public static IEnumerable<Titem> AllThat<Titem>(this IList<Titem> items, Predicate<Titem> condition)
+    public static IEnumerable<Titem> AllThat<Titem>(this IList<Titem> items, Func<Titem, bool> condition)
     {
-         return items.AllThat(new AnonymousCriteria<Titem>(condition));
+         return AllThat(items, new AnonymousCriteria<Titem>(condition));
     }
     public static IEnumerable<Titem> AllThat<Titem>(this IList<Titem> items, Criteria<Titem> criteria)
     {
-        foreach (var item in items)
+        foreach (Titem item in items)
         {
             if (criteria.IsSatisfiedBy(item))
                 yield return item;
@@ -29,18 +29,21 @@ public static class IteratorExtensions
 
 public class AnonymousCriteria<T> : Criteria<T>
 {
-    public AnonymousCriteria(Predicate<T> condition)
+    private readonly Func<T, bool> _condition;
+
+    public AnonymousCriteria(Func<T, bool> condition)
     {
-            throw new NotImplementedException();
+        _condition = condition;
     }
 
-    public bool IsSatisfiedBy<Titem>(Titem item)
+
+    public bool IsSatisfiedBy(T item)
     {
-        throw new NotImplementedException();
+        return _condition(item);
     }
 }
 
-public interface Criteria<T>
+public interface Criteria<Titem>
 {
-    bool IsSatisfiedBy<Titem>(Titem item);
+    bool IsSatisfiedBy(Titem item);
 }
