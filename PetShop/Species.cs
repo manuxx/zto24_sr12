@@ -18,5 +18,10 @@ namespace Training.DomainClasses
             this.estimatedLenOfLife = estimatedLenOfLife;
             this.environment = environment;
         }
+
+        public Predicate<Pet> IsASpeciesOf()
+        {
+            return pet => pet.species == this;
+        }
     }
 }

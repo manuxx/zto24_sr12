@@ -44,12 +44,12 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMice()
         {
-            return _petsInTheStore.AllItemsWhere(pet => pet.species == Species.Mouse);
+            return _petsInTheStore.AllItemsWhere(Pet.IsASpeciesOf(Species.Mouse));
         }
 
         public IEnumerable<Pet> AllFemalePets()
         {
-            return _petsInTheStore.AllItemsWhere(pet => pet.sex == Sex.Female);
+            return _petsInTheStore.AllItemsWhere(Pet.IsFemale());
         }
 
         public IEnumerable<Pet> AllCatsOrDogs()
@@ -64,7 +64,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsBornAfter2010()
         {
-            return _petsInTheStore.AllItemsWhere(pet => pet.yearOfBirth > 2010);
+            return _petsInTheStore.AllItemsWhere(Pet.IsBornAfter());
 
         }
 
