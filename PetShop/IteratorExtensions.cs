@@ -12,7 +12,7 @@ public static class IteratorExtensions
         }
     }
 
-    public static IEnumerable<TItem> OneItemThat<TItem>(this IEnumerable<TItem> items, Func<TItem, bool> condition)
+    public static IEnumerable<TItem> AllThat<TItem>(this IEnumerable<TItem> items, Func<TItem, bool> condition)
     {
         foreach (var item in items)
         {
