@@ -36,13 +36,49 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsSortedByName()
         {
-            SortedDictionary<string, Pet> sortedPets = new SortedDictionary<string, Pet>();
-            foreach (var pet in _petsInTheStore)
-            {
-                sortedPets.Add(pet.name, pet);
-            }
+            var result = new List<Pet>(_petsInTheStore);
+            result.Sort((pet1, pet2) => pet1.name.CompareTo(pet2.name));
+            return result;
+        }
 
-            return new ReadOnlySet<Pet>(sortedPets.Values);
+        public IEnumerable<Pet> AllMice()
+        {
+            return _petsInTheStore.OneItemThat(pet => pet.species == Species.Mouse);
+        }
+
+        public IEnumerable<Pet> AllFemalePets()
+        {
+            return _petsInTheStore.OneItemThat(pet => pet.sex == Sex.Female);
+        }
+
+        public IEnumerable<Pet> AllCatsOrDogs()
+        {
+            return _petsInTheStore.OneItemThat(pet => pet.species == Species.Cat || pet.species == Species.Dog);
+        }
+
+        public IEnumerable<Pet> AllPetsButNotMice()
+        {
+            return _petsInTheStore.OneItemThat(pet => pet.species != Species.Mouse);
+        }
+
+        public IEnumerable<Pet> AllPetsBornAfter2010()
+        {
+            return _petsInTheStore.OneItemThat(pet => pet.yearOfBirth > 2010);
+        }
+
+        public IEnumerable<Pet> AllDogsBornAfter2010()
+        {
+            return _petsInTheStore.OneItemThat(pet => pet.species == Species.Dog && pet.yearOfBirth > 2010);
+        }
+
+        public IEnumerable<Pet> AllMaleDogs()
+        {
+            return _petsInTheStore.OneItemThat(pet => pet.species == Species.Dog && pet.sex == Sex.Male);
+        }
+
+        public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
+        {
+            return _petsInTheStore.OneItemThat(pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit);
         }
     }
 }
