@@ -50,7 +50,7 @@ namespace Training.DomainClasses
             return (pet => pet.sex == Sex.Female);
         }
 
-        public static Func<Pet, bool> IsBornAfter(int year)
+        public static Func<Pet, bool> IsBornAfter(int year) 
         {
             return (pet => pet.yearOfBirth > year);
         }
