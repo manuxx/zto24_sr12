@@ -55,4 +55,48 @@ namespace Training.DomainClasses
             return pet => pet.sex == Sex.Female;
         }
     }
+
+    class SexCriteria : Criteria<Pet>
+    {
+        private Sex sex;
+
+        public SexCriteria(Sex sex)
+        {
+            this.sex = sex;
+        }
+        public bool IsSatisfiedBy(Pet pet)
+        {
+            return pet.sex == sex;
+        }
+    }
+
+    internal class BornAfterCriteria : Criteria<Pet>
+    {
+        private int year;
+
+        public BornAfterCriteria(int year)
+        {
+            this.year = year;
+        }
+
+        public bool IsSatisfiedBy(Pet pet)
+        {
+            return pet.yearOfBirth > year;
+        }
+    }
+
+    internal class SpeciesCriteria : Criteria<Pet>
+    {
+        private Species species;
+
+        public SpeciesCriteria(Species species)
+        {
+            this.species = species;
+        }
+
+        public bool IsSatisfiedBy(Pet pet)
+        {
+            return pet.species == species;
+        }
+    }
 }

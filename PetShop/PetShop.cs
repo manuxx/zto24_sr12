@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Training.DomainClasses
 {
@@ -77,10 +78,22 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.AllThat((pet => pet.species != Species.Mouse));
-
+            return _petsInTheStore.AllThat(new Negation<Pet>(Pet.IsASpeciesOf(Species.Mouse)));
         }
 
        
+    }
+
+    class Negation<T> : Criteria<T>
+    {
+        private Predicate<T> _predicate;
+        public Negation(Predicate<T> predicate)
+        {
+            _predicate = predicate;
+        }
+        public bool IsSatisfiedBy(T item)
+        {
+            return !_predicate(item);  
+        }
     }
 }
