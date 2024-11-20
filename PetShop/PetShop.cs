@@ -77,10 +77,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.AllThat((pet => pet.species != Species.Mouse));
-
+            return _petsInTheStore.AllThat(new Negation<Pet>(Pet.IsASpeciesOf(Species.Mouse)));
         }
-
-       
     }
 }

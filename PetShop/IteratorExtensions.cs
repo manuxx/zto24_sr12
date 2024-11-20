@@ -46,3 +46,17 @@ public interface Criteria<TItem>
 {
     bool IsSatisfiedBy(TItem item);
 }
+
+public class Negation<Titem> : Criteria<Titem>
+{
+	private readonly Criteria<Titem> _condition;
+	public Negation(Criteria<Titem> condition)
+	{
+		_condition = condition;
+	}
+
+	public bool IsSatisfiedBy(Titem item)
+	{
+		return !_condition.IsSatisfiedBy(item);
+	}
+}
