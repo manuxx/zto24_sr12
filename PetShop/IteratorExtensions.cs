@@ -47,16 +47,48 @@ public interface Criteria<TItem>
     bool IsSatisfiedBy(TItem item);
 }
 
-public class Negation<Titem> : Criteria<Titem>
+public class Negation<TItem> : Criteria<TItem>
 {
-	private readonly Criteria<Titem> _condition;
-	public Negation(Criteria<Titem> condition)
+	private readonly Criteria<TItem> _criteriaForNegation;
+	public Negation(Criteria<TItem> condition)
 	{
-		_condition = condition;
+		_criteriaForNegation = condition;
 	}
 
-	public bool IsSatisfiedBy(Titem item)
+	public bool IsSatisfiedBy(TItem item)
 	{
-		return !_condition.IsSatisfiedBy(item);
+		return !_criteriaForNegation.IsSatisfiedBy(item);
+	}
+}
+
+public class Alternative<TItem> : Criteria<TItem>
+{
+	private readonly Criteria<TItem> _firstCriteria;
+	private readonly Criteria<TItem> _secondCriteria;
+	public Alternative(Criteria<TItem> firstCriteria, Criteria<TItem> secondCriteria)
+	{
+		_firstCriteria = firstCriteria;
+		_secondCriteria = secondCriteria;
+	}
+
+	public bool IsSatisfiedBy(TItem item)
+	{
+		return _firstCriteria.IsSatisfiedBy(item) || _secondCriteria.IsSatisfiedBy(item);
+	}
+}
+
+public class Conjunction<TItem> : Criteria<TItem>
+{
+	private readonly Criteria<TItem> _firstCriteria;
+	private readonly Criteria<TItem> _secondCriteria;
+	public Conjunction(Criteria<TItem> firstCriteria, Criteria<TItem> secondCriteria)
+	{
+		_firstCriteria = firstCriteria;
+		_secondCriteria = secondCriteria;
+	}
+
+	public bool IsSatisfiedBy(TItem item)
+	{
+		return _firstCriteria.IsSatisfiedBy(item) && _secondCriteria.IsSatisfiedBy(item);
 	}
 }

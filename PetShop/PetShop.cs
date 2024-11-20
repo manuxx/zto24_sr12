@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Training.DomainClasses
 {
@@ -40,17 +41,17 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return _petsInTheStore.AllThat((pet => pet.species==Species.Dog && pet.yearOfBirth >2010));
+            return _petsInTheStore.AllThat(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
         }
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.AllThat((pet => pet.sex==Sex.Male && pet.species == Species.Dog));
+            return _petsInTheStore.AllThat(new Conjunction<Pet>(new Negation<Pet>(Pet.IsFemale()), Pet.IsASpeciesOf(Species.Dog)));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.AllThat((pet => pet.yearOfBirth >2011 || pet.species == Species.Rabbit));
+            return _petsInTheStore.AllThat(new Alternative<Pet>(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
         }
 
         public IEnumerable<Pet> AllMice()
@@ -71,7 +72,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return _petsInTheStore.AllThat((pet => pet.species == Species.Cat || pet.species == Species.Dog));
+            return _petsInTheStore.AllThat(new Alternative<Pet>(Pet.IsASpeciesOf(Species.Cat), Pet.IsASpeciesOf(Species.Dog)));
 
         }
 
