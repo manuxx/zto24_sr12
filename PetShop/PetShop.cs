@@ -50,7 +50,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.AllThat((pet => pet.yearOfBirth >2011 || pet.species == Species.Rabbit));
+            return _petsInTheStore.AllThat(new Alternative(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
         }
 
         public IEnumerable<Pet> AllMice()
