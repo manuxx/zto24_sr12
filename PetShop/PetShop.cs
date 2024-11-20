@@ -71,7 +71,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return _petsInTheStore.AllThat((pet => pet.species == Species.Cat || pet.species == Species.Dog));
+            return _petsInTheStore.AllThat((Pet.IsASpeciesOf(Species.Cat).Or(Pet.IsASpeciesOf(Species.Dog))));
 
         }
 
