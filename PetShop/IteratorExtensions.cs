@@ -27,16 +27,16 @@ public static class IteratorExtensions
 
 }
 
-public class AnonymousCriteria<Titem> : Criteria<Titem>
+public class AnonymousCriteria<TItem> : Criteria<TItem>
 {
-    private readonly Predicate<Titem> _condition;
+    private readonly Predicate<TItem> _condition;
 
-    public AnonymousCriteria(Predicate<Titem> condition)
+    public AnonymousCriteria(Predicate<TItem> condition)
     {
         _condition = condition;
     }
 
-    public bool IsSatisfiedBy(Titem item)
+    public bool IsSatisfiedBy(TItem item)
     {
         return _condition(item);
     }
