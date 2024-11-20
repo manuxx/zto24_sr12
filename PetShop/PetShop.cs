@@ -40,7 +40,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return _petsInTheStore.AllThat((pet => pet.species==Species.Dog && pet.yearOfBirth >2010));
+            return _petsInTheStore.AllThat(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
         }
 
         public IEnumerable<Pet> AllMaleDogs()
@@ -50,7 +50,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.AllThat(new Alternative(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
+            return _petsInTheStore.AllThat(new Alternative<Pet>(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
         }
 
         public IEnumerable<Pet> AllMice()
@@ -82,6 +82,40 @@ namespace Training.DomainClasses
         }
 
        
+    }
+
+    public class Conjunction<TItem> : Criteria<TItem>
+    {
+        private readonly Criteria<TItem> _criteria1;
+        private readonly Criteria<TItem> _criteria2;
+
+        public Conjunction(Criteria<TItem> criteria1, Criteria<TItem> criteria2)
+        {
+            _criteria1 = criteria1;
+            _criteria2 = criteria2;
+        }
+
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return _criteria1.IsSatisfiedBy(item) && _criteria2.IsSatisfiedBy(item);
+        }
+    }
+
+    public class Alternative<Pet> : Criteria<Pet>
+    {
+        private readonly Criteria<Pet> _criteria1;
+        private readonly Criteria<Pet> _criteria2;
+
+        public Alternative(Criteria<Pet> criteria1, Criteria<Pet> criteria2)
+        {
+            _criteria1 = criteria1;
+            _criteria2 = criteria2;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return _criteria1.IsSatisfiedBy(item) || _criteria2.IsSatisfiedBy(item);
+        }
     }
 
     public class Negation<TItem> : Criteria<TItem>
