@@ -41,17 +41,17 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return _petsInTheStore.AllThat((pet => pet.species==Species.Dog && pet.yearOfBirth >2010));
+            return _petsInTheStore.AllThat(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
         }
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.AllThat((pet => pet.sex==Sex.Male && pet.species == Species.Dog));
+            return _petsInTheStore.AllThat(Pet.IsMale().And(Pet.IsASpeciesOf(Species.Dog)));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.AllThat((pet => pet.yearOfBirth >2011 || pet.species == Species.Rabbit));
+            return _petsInTheStore.AllThat(Pet.IsBornAfter(2011).Or(Pet.IsASpeciesOf(Species.Rabbit)));
         }
 
         public IEnumerable<Pet> AllMice()
@@ -72,7 +72,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return _petsInTheStore.AllThat((pet => pet.species == Species.Cat || pet.species == Species.Dog));
+            return _petsInTheStore.AllThat(new Alternative<Pet>(Pet.IsASpeciesOf(Species.Cat), Pet.IsASpeciesOf(Species.Dog)));
 
         }
 
@@ -84,16 +84,41 @@ namespace Training.DomainClasses
        
     }
 
-    class Negation<T> : Criteria<T>
+    class Conjunction<TItem> : BinaryCriteria<TItem>
     {
-        private Predicate<T> _predicate;
-        public Negation(Predicate<T> predicate)
+
+        public Conjunction(Criteria<TItem> criteria1, Criteria<TItem> criteria2) : base(criteria1, criteria2)
         {
-            _predicate = predicate;
         }
-        public bool IsSatisfiedBy(T item)
+
+        public override bool IsSatisfiedBy(TItem item)
         {
-            return !_predicate(item);  
+            return _criteria1.IsSatisfiedBy(item) && _criteria2.IsSatisfiedBy(item);
+        }
+    }
+
+    internal class Alternative<TItem> : BinaryCriteria<TItem>
+    {
+        public Alternative(Criteria<TItem> criteria1, Criteria<TItem> criteria2) : base(criteria1, criteria2)
+        {
+        }
+
+        public override bool IsSatisfiedBy(TItem item)
+        {
+            return _criteria1.IsSatisfiedBy(item) || _criteria2.IsSatisfiedBy(item);
+        }
+    }
+
+    class Negation<TItem> : Criteria<TItem>
+    {
+        private Criteria<TItem> _criteria;
+        public Negation(Criteria<TItem> criteria)
+        {
+            _criteria = criteria;
+        }
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return !_criteria.IsSatisfiedBy(item);  
         }
     }
 }
