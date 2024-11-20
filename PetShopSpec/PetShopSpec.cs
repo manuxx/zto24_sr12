@@ -200,12 +200,34 @@ namespace Training.Specificaton
         protected static Pet dog_Lassie;
         protected static Pet dog_Pluto;
     }
+    internal class Where_Pet
+    {
+        public static CriteriaBuilder HasAny(Func<Pet, Species> fieldSelector)
+        {
+            return new CriteriaBuilder(fieldSelector);
+        }
+    }
+
+    internal class CriteriaBuilder
+    {
+        private Func<Pet, Species> _fieldSelector;
+        public CriteriaBuilder(Func<Pet, Species> fieldSelector)
+        {
+            _fieldSelector = fieldSelector;
+        }
+
+        public Criteria<Pet> equalTo(Species cat)
+        {
+            return new AnonymousCriteria<Pet>(pet => _fieldSelector(pet) == cat);
+        }
+    }
 
     public class when_searching_for_pets : concern_with_pets_for_sorting_and_filtering
     {
         private It should_be_able_to_find_all_cats = () =>
         {
-            var foundPets = subject.AllCats();
+            Criteria<Pet> criteria = Where_Pet<Pet>.HasAny(Pet => Pet.species.equalTo(Species.Cat));
+            var foundPets = subject.AllPets().AllThat(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
         private It should_be_able_to_find_all_mice = () =>

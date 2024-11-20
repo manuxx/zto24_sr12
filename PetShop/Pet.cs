@@ -118,4 +118,6 @@ namespace Training.DomainClasses
             return !_criteria.IsSatisfiedBy(item);
         }
     }
+
+   
 }
