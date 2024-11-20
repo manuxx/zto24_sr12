@@ -80,7 +80,5 @@ namespace Training.DomainClasses
             return _petsInTheStore.AllThat(new Negation<Pet>(Pet.IsASpeciesOf(Species.Mouse)));
 
         }
-
-       
     }
 }
