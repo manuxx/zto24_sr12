@@ -55,7 +55,12 @@ namespace Training.DomainClasses
 	        return new SexCriteria(Sex.Female);
         }
 
-        public class SpeciesCriteria : Criteria<Pet>
+        public static Criteria<Pet> IsMale()
+        {
+	        return new SexCriteria(Sex.Male);
+        }
+
+		public class SpeciesCriteria : Criteria<Pet>
         {
 	        private readonly Species _species;
 
