@@ -50,7 +50,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.AllThat((pet => pet.yearOfBirth >2011 || pet.species == Species.Rabbit));
+            return _petsInTheStore.AllThat(new Alternative(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
         }
 
         public IEnumerable<Pet> AllMice()
@@ -77,10 +77,25 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.AllThat(new Negation(Pet.IsASpeciesOf(Species.Mouse)));
+            return _petsInTheStore.AllThat(new Negation<Pet>(Pet.IsASpeciesOf(Species.Mouse)));
 
         }
 
        
+    }
+
+    public class Negation<TItem> : Criteria<TItem>
+    {
+        private readonly Criteria<TItem> _criteriaForNegation;
+
+        public Negation(Criteria<TItem> criteriaForNegation)
+        {
+            _criteriaForNegation = criteriaForNegation;
+        }
+
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return !_criteriaForNegation.IsSatisfiedBy(item);
+        }
     }
 }
